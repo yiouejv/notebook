@@ -36,19 +36,6 @@ end
 
 --------------------------------- PRINT
 
--- 转换为字符串
-function STR(obj)
-    if type(obj) == "table" then
-        return _STR_TABLE(obj)
-    elseif type(obj) == "string" then
-        return _STR_STRING(obj)
-    elseif obj == nil then
-        return "nil"
-    else
-        return tostring(obj)
-    end
-end
-
 local _esc_table = {
     ["\n"] = "\\n",
     ["\r"] = "\\r",
@@ -58,7 +45,8 @@ local _esc_table = {
     ["\\"] = "\\\\",
     ["\""] = "\\\"",
 }
-function _STR_STRING(str)
+
+local function _STR_STRING(str)
     str = string.gsub(str, ".", function(c)
         return _esc_table[c] or c
     end)
@@ -95,6 +83,19 @@ function _STR_TABLE(obj, indent, checker)
     ret[1+#ret] = indent .. "}"
     checker[obj] = nil
     return table.concat(ret, "")
+end
+
+-- 转换为字符串
+function STR(obj)
+    if type(obj) == "table" then
+        return _STR_TABLE(obj)
+    elseif type(obj) == "string" then
+        return _STR_STRING(obj)
+    elseif obj == nil then
+        return "nil"
+    else
+        return tostring(obj)
+    end
 end
 
 -- 调试用的print

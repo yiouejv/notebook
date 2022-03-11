@@ -1,6 +1,6 @@
 
 -- local util = loadfile("./util.lua")()
-require("util")
+local util = require("util")
 
 local function TestConcatList()
     local dest = {}
@@ -27,8 +27,9 @@ function TestUpdate()
 end
 
 function main()
-    TestConcatList()
+    -- TestConcatList()
     -- TestUpdate()
+    PRINT("sssssssssss ", Uuid())
 end
 
 main()
