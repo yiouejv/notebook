@@ -32,6 +32,12 @@ function table.Update(dest, src)
     end
 end
 
+function table.ValueAdd(dest, src)
+    for k, v in pairs(src) do
+        dest[k] = (dest[k] or 0) + v
+    end
+end
+
 --------------------------------------- end table
 
 --------------------------------- PRINT
