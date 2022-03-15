@@ -3,13 +3,13 @@ crontab命令常见于Unix和类Unix的操作系统之中，用于设置周期�
 
 简单点说：就是和闹钟的概念类似。就是定时执行
 
-- # 查看cond 状态
+- 查看cond 状态
     service cron status
-- # 启动cron
+- 启动cron
     service cron start
-- # 关闭cron
+- 关闭cron
     service cron stop
-- # 重启cron
+- 重启cron
     service cron restart
 
 **crontab 命令**
