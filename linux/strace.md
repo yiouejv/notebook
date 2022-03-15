@@ -87,9 +87,10 @@ qualifier只能是 trace,abbrev,verbose,raw,signal,read,write其中之一.value�
 --------------
 
 - 跟踪可执行程序
-strace -f -F -o ~/straceout.txt myserver
--f -F选项告诉strace同时跟踪fork和vfork出来的进程，-o选项把所有strace输出写到~/straceout.txt里 面，myserver是要启动和调试的程序。
+`strace -f -F -o ~/straceout.txt myserver`
+
+`-f -F选项告诉strace同时跟踪fork和vfork出来的进程，-o选项把所有strace输出写到~/straceout.txt里 面，myserver是要启动和调试的程序。`
 
 - 跟踪服务程序
-strace -o output.txt -T -tt -e trace=all -p 28979
-跟踪28979进程的所有系统调用（-e trace=all），并统计系统调用的花费时间，以及开始时间（并以可视化的时分秒格式显示），最后将记录结果存在output.txt文件里面。
+`strace -o output.txt -T -tt -e trace=all -p 28979`
+`跟踪28979进程的所有系统调用（-e trace=all），并统计系统调用的花费时间，以及开始时间（并以可视化的时分秒格式显示），最后将记录结果存在output.txt文件里面。`
