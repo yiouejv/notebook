@@ -9,7 +9,7 @@
 
 <a href="linux/export.md">4. 环境变量设置</a>
 
-<a href="linux/diak_manager.md">5. 磁盘管理</a>
+<a href="linux/disk_manager.md">5. 磁盘管理</a>
 
 <a href="linux/strace.md">6. 跟踪进程执行时的系统调用和信号</a>
 
