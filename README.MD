@@ -15,6 +15,8 @@
 
 <a href="linux/yum.md">7. yum 软件包管理</a>
 
+<a href="linux/ps.md">8. 进程管理工具</a>
+
 
 <h2>工具</h2>
 
