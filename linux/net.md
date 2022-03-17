@@ -104,16 +104,20 @@ ssh登陆远程服务器host，ID为用户名。
 
 - ftp/sftp文件传输:
 
+```
 $sftp ID@host
+```
 
 登陆服务器host，ID为用户名。sftp登陆后，可以使用下面的命令进一步操作：
 
+```
 get filename # 下载文件
 put filename # 上传文件
 ls # 列出host上当前路径的所有文件
 cd # 在host上更改当前路径
 lls # 列出本地主机上当前路径的所有文件
 lcd # 在本地主机更改当前路径
+```
 
 
 <h3>网络复制</h3>
