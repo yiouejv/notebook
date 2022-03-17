@@ -17,9 +17,13 @@
 
 <a href="linux/performance.md">8. 性能监控</a>
 
+<a href="linux/net.md">9. 网络工具</a>
+
 
 <h2>工具</h2>
 
 <a href="tool/sync_client_lua.py">1. 监听某个目录的文件并复制到相应的目录</a>
 
 <a href="tool/print_color.md">2. 打印增加颜色</a>
+
+<a href="tool/PrintPretty.md">3. PrintPretty.py</a>
