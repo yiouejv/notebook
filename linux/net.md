@@ -1,5 +1,5 @@
 
-**查询网络服务和端口**
+<h3>查询网络服务和端口</h3>
 
 netstat 命令用于显示各种网络相关信息，如网络连接，路由表，接口状态 (Interface Statistics)，masquerade 连接，多播成员 (Multicast Memberships) 等等。
 
@@ -49,7 +49,7 @@ lsof（list open files）是一个列出当前系统打开文件的工具。
     root     22781 22698  0 00:54 pts/20   00:00:00 grep 11554
 ```
 
-**路由状态**
+<h3>路由状态</h3>
 
 - 查看路由状态:
 
@@ -76,7 +76,7 @@ $host domain
 ```
 
 
-**镜像下载**
+<h3>镜像下载</h3>
 
 直接下载文件或者网页:
 
@@ -91,7 +91,7 @@ wget url
 -c：断点续传
 ```
 
-**ftp sftp lftp ssh**
+<h3>ftp sftp lftp ssh</h3>
 
 - SSH登陆:
 
@@ -116,7 +116,7 @@ lls # 列出本地主机上当前路径的所有文件
 lcd # 在本地主机更改当前路径
 
 
-**网络复制**
+<h3>网络复制</h3>
 
 将本地localpath指向的文件上传到远程主机的path路径:
 
