@@ -37,6 +37,7 @@ function table.ValueAdd(dest, src)
         dest[k] = (dest[k] or 0) + v
     end
 end
+
 --------------------------------------- end table
 
 --------------------------------- PRINT
@@ -113,7 +114,10 @@ function PRINT(...)
     for i=1,max_index do
         args[i] = STR(args[i])
     end
-    print(table.concat(args, ", "))
+    local str = table.concat(args, ", ")
+    local pre = string.char(0x1b) .. "[1;33;40m"
+    local suf = string.char(0x1b) .. "[0m"
+    print(pre .. str .. suf)
 end
 
 ------------------------------------------- end PRINT
