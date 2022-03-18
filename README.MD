@@ -19,6 +19,8 @@
 
 <a href="linux/net.md">9. 网络工具</a>
 
+<a href="linux/system.md">10. 系统管理</a>
+
 
 <h2>工具</h2>
 
