@@ -38,6 +38,53 @@ function table.ValueAdd(dest, src)
     end
 end
 
+function table.Copy(t)
+    local r = {}
+    for k, v in pairs(t) do
+        r[k] = v
+    end
+    return r
+end
+
+function table.DeepCopy(src, quiet)
+    if type(src) ~= "table" then
+        return src
+    end
+    local cache = {}
+    local function CloneTable(t, level)
+        if not level then
+            level = 0
+        end
+
+        if level > 20 then
+            if not quiet then
+                error("table clone failed, source table is too deep!")
+            else
+                return t
+            end
+        end
+
+        local rel = {}
+        for k, v in pairs(t) do
+            if type(v) == "table" then
+                if cache[v] then
+                    rel[k] = cache[v]
+                else
+                    rel[k] = CloneTable(v, level + 1)
+                    cache[v] = rel[k]
+                end
+            else
+                rel[k] = v
+            end
+        end
+        local mt = getmetatable(t)
+        if mt then
+            setmetatable(rel, mt)
+        end
+        return rel
+    end
+    return CloneTable(src)
+end
 --------------------------------------- end table
 
 --------------------------------- PRINT
