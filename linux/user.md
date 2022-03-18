@@ -35,3 +35,94 @@
 - 查看当前用户所属组: groups
 - 查看某个用户所属组: groups name
 - id 查看: id
+
+- 一个用户可以属于多个组，将用户加入到组:
+
+```
+$usermod -G groupNmame username
+```
+
+- 变更用户所属的根组(将用加入到新的组，并从原有的组中除去）:
+
+```
+$usermod -g groupName username
+```
+
+使用ls -l可查看文件的属性字段，文件属性字段总共有10个字母组成，第一个字母表示文件类型，如果这个字母是一个减号”-”,则说明该文件是一个普通文件。
+
+字母”d”表示该文件是一个目录，字母”d”, 是dirtectory(目录)的缩写。
+
+后面的9个字母为该文件的权限标识，3个为一组，分别表示文件所属用户、用户所在组、其它用户的读写和执行权限； 例如:
+
+```
+[/home/weber#]ls -l /etc/group
+-rwxrw-r-- colin king 725 2013-11-12 15:37 /home/colin/a
+```
+
+---------------------------
+
+表示这个文件对文件拥有者colin这个用户可读写、可执行；对colin所在的组（king）可读可写；对其它用户只可读；
+
+更改文件或目录的拥有者
+
+```
+$chown username dirOrFile
+```
+
+使用-R选项递归更改该目下所有文件的拥有者:
+
+```
+$chown -R weber server/
+```
+
+----------------------
+
+**环境变量**
+
+bashrc与profile都用于保存用户的环境信息，bashrc用于交互式non-loginshell，而profile用于交互式login shell。
+
+```
+/etc/profile，/etc/bashrc 是系统全局环境变量设定
+~/.profile，~/.bashrc用户目录下的私有环境变量设定
+```
+
+当登入系统获得一个shell进程时，其读取环境设置脚本分为三步:
+
+```
+首先读入的是全局环境变量设置文件/etc/profile，然后根据其内容读取额外的文档，如/etc/profile.d和/etc/inputrc
+
+读取当前登录用户Home目录下的文件~/.bash_profile，其次读取~/.bash_login，最后读取~/.profile，这三个文档设定基本上是一样的，读取有优先关系
+
+读取~/.bashrc
+```
+
+~/.profile与~/.bashrc的区别:
+
+```
+这两者都具有个性化定制功能
+~/.profile可以设定本用户专有的路径，环境变量，等，它只能登入的时候执行一次
+~/.bashrc也是某用户专有设定文档，可以设定路径，命令别名，每次shell script的执行都会使用它一次
+```
+
+这两者都具有个性化定制功能
+
+例如，我们可以在这些环境变量中设置自己经常进入的文件路径，以及命令的快捷方式：
+
+```
+.bashrc
+alias m='more'
+alias cp='cp -i'
+alias mv='mv -i'
+alias ll='ls -l'
+alias lsl='ls -lrt'
+alias lm='ls -al|more'
+
+log=/opt/applog/common_dir
+unit=/opt/app/unittest/common
+
+.bash_profile
+. /opt/app/tuxapp/openav/config/setenv.prod.sh.linux
+export PS1='$PWD#'
+```
+
+通过上述设置，我们进入log目录就只需要输入cd $log即可；
