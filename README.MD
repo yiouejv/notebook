@@ -21,6 +21,11 @@
 
 <a href="linux/system.md">10. 系统管理</a>
 
+<h2>linux工具</h2>
+
+<a href="linux/ldd.md">1. ldd 查看程序依赖库</a>
+
+
 
 <h2>工具</h2>
 
