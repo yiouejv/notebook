@@ -25,6 +25,8 @@
 
 <a href="linux/ldd.md">1. ldd 查看程序依赖库</a>
 
+<a href="linux/lsof.md">2. lsof 一切皆文件</a>
+
 
 
 <h2>工具</h2>
