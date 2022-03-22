@@ -29,6 +29,9 @@
 
 <a href="linux/ps2.md">3. ps 进程查看器</a>
 
+<a href="linux/pstack.md">4. pstack 跟踪进程栈</a>
+
+
 
 
 <h2>工具</h2>
