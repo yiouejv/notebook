@@ -43,3 +43,9 @@
 <a href="tool/print_color.md">2. 打印增加颜色</a>
 
 <a href="tool/PrintPretty.py">3. PrintPretty.py</a>
+
+
+<h2>python</h2>
+
+<a href="python/python.md">1. python语法</a>
+
