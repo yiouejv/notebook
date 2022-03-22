@@ -9,17 +9,15 @@
 
 <a href="linux/export.md">4. 环境变量设置</a>
 
-<a href="linux/strace.md">5. 跟踪进程执行时的系统调用和信号</a>
+<a href="linux/yum.md">5. yum 软件包管理</a>
 
-<a href="linux/yum.md">6. yum 软件包管理</a>
+<a href="linux/ps.md">6. 进程管理工具</a>
 
-<a href="linux/ps.md">7. 进程管理工具</a>
+<a href="linux/performance.md">7. 性能监控</a>
 
-<a href="linux/performance.md">8. 性能监控</a>
+<a href="linux/net.md">8. 网络工具</a>
 
-<a href="linux/net.md">9. 网络工具</a>
-
-<a href="linux/system.md">10. 系统管理</a>
+<a href="linux/system.md">9. 系统管理</a>
 
 <h2>linux工具</h2>
 
@@ -30,6 +28,8 @@
 <a href="linux/ps2.md">3. ps 进程查看器</a>
 
 <a href="linux/pstack.md">4. pstack 跟踪进程栈</a>
+
+<a href="linux/strace.md">5. 跟踪进程执行时的系统调用和信号</a>
 
 
 
