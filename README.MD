@@ -31,6 +31,8 @@
 
 <a href="linux/strace.md">5. 跟踪进程执行时的系统调用和信号</a>
 
+<a href="linux/ipcs.md">6. ipcs 查询进程间通信状态</a>
+
 
 
 
