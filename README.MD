@@ -27,6 +27,8 @@
 
 <a href="linux/lsof.md">2. lsof 一切皆文件</a>
 
+<a href="linux/ps2.md">3. ps 进程查看器</a>
+
 
 
 <h2>工具</h2>
