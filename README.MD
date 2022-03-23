@@ -35,6 +35,8 @@
 
 <a href="linux/top.md">7. top linux下的任务管理器</a>
 
+<a href="linux/free.md">8. free 查询可用内存</a>
+
 
 
 
@@ -46,9 +48,3 @@
 <a href="tool/print_color.md">2. 打印增加颜色</a>
 
 <a href="tool/PrintPretty.py">3. PrintPretty.py</a>
-
-
-<h2>python</h2>
-
-<a href="python/python.md">1. python语法</a>
-
