@@ -37,6 +37,8 @@
 
 <a href="linux/free.md">8. free 查询可用内存</a>
 
+<a href="linux/vmstat.md">9. vmstat 监视内存使用情况</a>
+
 
 
 
