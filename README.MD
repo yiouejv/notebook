@@ -33,6 +33,9 @@
 
 <a href="linux/ipcs.md">6. ipcs 查询进程间通信状态</a>
 
+<a href="linux/top.md">7. top linux下的任务管理器</a>
+
+
 
 
 
