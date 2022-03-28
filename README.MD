@@ -39,6 +39,8 @@
 
 <a href="linux/vmstat.md">9. vmstat 监视内存使用情况</a>
 
+<a href="linux/iostat.md">10. iostat 监视I/O子系统</a>
+
 
 
 
