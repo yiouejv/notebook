@@ -43,6 +43,8 @@
 
 <a href="linux/sar.md">11. sar 找出系统瓶颈的利器</a>
 
+<a href="linux/objdump.md">12. objdump 二进制文件分析</a>
+
 
 
 
