@@ -45,6 +45,8 @@
 
 <a href="linux/objdump.md">12. objdump 二进制文件分析</a>
 
+<a href="linux/wget.md">13. wget 文件下载</a>
+
 
 
 
