@@ -66,3 +66,5 @@
 
 <a href="golang/variable.go">2. variable</a>
 
+<a href="golang/constant.go">3. constant</a>
+
