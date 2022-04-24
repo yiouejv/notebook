@@ -60,4 +60,9 @@
 <a href="tool/PrintPretty.py">3. PrintPretty.py</a>
 
 
-<h2><a href="golang/golang.md">golang</a></h2>
+<h2>golang</h2>
+
+<a href="golang/hello.go">1. hello world</a>
+
+<a href="golang/variable.go">2. variable</a>
+
