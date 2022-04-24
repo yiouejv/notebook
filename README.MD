@@ -68,3 +68,7 @@
 
 <a href="golang/constant.go">3. constant</a>
 
+<a href="golang/for.go">4. for</a>
+
+<a href="golang/function.go">5. function</a>
+
