@@ -72,3 +72,7 @@
 
 <a href="golang/function.go">5. function</a>
 
+<a href="golang/method.go">6. method</a>
+
+<a href="golang/array.go">7. array</a>
+
