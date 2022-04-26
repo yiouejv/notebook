@@ -26,6 +26,15 @@ func main() {
     }
     fmt.Println(arrr1)
 
+    var arrr2 [1][2][3]int
+    fmt.Println(arrr2)
+
+    var arrr3 [2][2]int = {
+        { 1, 2 },
+        { 2, 3 },
+    }
+    fmt.Println(arrr3)
+
 // 往函数里传数组
     f(arr3)
 }

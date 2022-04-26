@@ -76,3 +76,11 @@
 
 <a href="golang/array.go">7. array</a>
 
+<a href="golang/pointer.go">8. pointer</a>
+
+<a href="golang/range.go">9. range</a>
+
+<a href="golang/interface.go">10. interface</a>
+
+<a href="golang/goroutine.go">11. goroutine</a>
+
