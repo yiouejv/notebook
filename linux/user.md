@@ -27,6 +27,9 @@
 - 添加用户: useradd -m 用户名
 - 设置密码: passwd 用户名
 - 删除用户: userdel -r 用户名
+- 为用户指定: usermod -s /bin/bash 用户名
+
+    不指定可能出现不显示机器名及用户名的情况
 
 
 
