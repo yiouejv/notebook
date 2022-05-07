@@ -94,4 +94,4 @@
 
 <h2>解决方案</h2>
 
-<a href="解决方案/window共享文件夹给vm linux">vmlinux.md</a>
+<a href="解决方案/vmlinux.md">window共享文件夹给vm linux</a>
