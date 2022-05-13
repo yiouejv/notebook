@@ -12,7 +12,10 @@
 '''
 
 import xlrd
+import os
 import openpyxl
+from win32com.client import Dispatch
+
 
 filepath = u"xls/J技能表.xlsx"
 sheetname = "skill"
@@ -36,7 +39,7 @@ def getWaitTransCol(sheet, colIndex):
     for row in range(4, nrows):
         v = sheet.cell_value(row, index)
         row2value[row + 1] = v
-        # print("row {}:".format(row + 1), v)
+        print("row {}:".format(row + 1), v)
     return row2value
 
 def getTextId(row):
@@ -48,7 +51,7 @@ def writeLanguage(book, row2value):
     wsheet.title = "language"
 
     firstRows = [u"文本编号", u"中文"]
-    secondRows = ["textId", "zh"]
+    secondRows = ["textId", "zhcn"]
     thirdRows = ["string", "string"]
     fourRows = ["" for _ in range(len(firstRows))]
 
@@ -78,12 +81,12 @@ def writeLanguageList(book):
     secondRows = [u"nation", "language", "show"]
     thirdRows = [u"string", "string", "string"]
     fourRows = ["" for _ in range(len(firstRows))]
-    fiveRows = [u"中国", "zh", u"中文"]
-    sixRows = [u"英国", "en", "English"]
-    sevenRows = [u"德国", "de", "English"]
-    eightRows = [u"法国", "fr", "English"]
-    nineRows = [u"日本", "dex", "English"]
-    tenRows = [u"韩国", "ko", "English"]
+    fiveRows = [u"中国", "zhcn", u"中文"]
+    sixRows = [u"英国", "enus", "English"]
+    # sevenRows = [u"德国", "de", "English"]
+    # eightRows = [u"法国", "fr", "English"]
+    # nineRows = [u"日本", "dex", "English"]
+    # tenRows = [u"韩国", "ko", "English"]
 
     for col in range(1, len(firstRows) + 1):
         sheet.cell(row=1, column=col, value=firstRows[col - 1])
@@ -92,10 +95,10 @@ def writeLanguageList(book):
         sheet.cell(row=4, column=col, value=fourRows[col - 1])
         sheet.cell(row=5, column=col, value=fiveRows[col - 1])
         sheet.cell(row=6, column=col, value=sixRows[col - 1])
-        sheet.cell(row=7, column=col, value=sevenRows[col - 1])
-        sheet.cell(row=8, column=col, value=eightRows[col - 1])
-        sheet.cell(row=9, column=col, value=nineRows[col - 1])
-        sheet.cell(row=10, column=col, value=tenRows[col - 1])
+        # sheet.cell(row=7, column=col, value=sevenRows[col - 1])
+        # sheet.cell(row=8, column=col, value=eightRows[col - 1])
+        # sheet.cell(row=9, column=col, value=nineRows[col - 1])
+        # sheet.cell(row=10, column=col, value=tenRows[col - 1])
 
 def writeMain(table):
     sheet = table.active
@@ -152,6 +155,12 @@ def writeSkillDescCol(row2value):
 
 
 def main():
+    xlApp = Dispatch("Excel.Application")
+    xlApp.Visible = False
+    xlBook = xlApp.Workbooks.Open(os.path.abspath(filepath))
+    xlBook.Save()
+    xlBook.Close()
+
     table = xlrd.open_workbook(filepath)
     sheet = table.sheet_by_name(sheetname)
     index = getCellIndexByName(sheet, 0, u"技能描述")
