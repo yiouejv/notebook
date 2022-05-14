@@ -59,6 +59,8 @@
 
 <a href="tool/PrintPretty.py">3. PrintPretty.py</a>
 
+<a href="tool/skill_lang.py">4. python 技能表导出(主要记录操作excel)</a>
+
 
 <h2>golang</h2>
 
