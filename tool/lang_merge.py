@@ -27,6 +27,9 @@ languageList = []
 global wait_write_list
 wait_write_list = []
 
+global export_row_index
+export_row_index = 4
+
 # lang 表: 翻译回来的表
 # raw 表: 本地的多语言表
 
@@ -131,19 +134,25 @@ def raw_key_fill_color(sheet, key, xlspath):
     cell.fill = fill
 
 
+def get_index_from_language_list(lang):
+    for i, language in enumerate(languageList):
+        if language == lang:
+            return i + 1  # 1: pre is uid
+
+
 def export_diff_key(export_sheet, raw_sheet, key):
     print("export_diff_key, key:", key)
-    global row_index
+    global export_row_index
     is_first = True
     for lang in languageList:
-        rval, row, col = get_key_value(raw_sheet, key, lang)
+        rval, _, _ = get_key_value(raw_sheet, key, lang)
+        col = get_index_from_language_list(lang)
         if rval != "":
             if is_first:
                 is_first = False
-                export_sheet.cell(row=row_index+1, column=1, value=key)
-
-            export_sheet.cell(row=row_index+1, column=col+1, value=rval)
-            row_index += 1
+                export_sheet.cell(row=export_row_index+1, column=1, value=key)
+            export_sheet.cell(row=export_row_index+1, column=col+1, value=rval)
+    export_row_index += 1
 
 
 def read_raw_language_list():
@@ -180,7 +189,7 @@ def main():
     lang_table = xlrd.open_workbook(lang_path)
     lang_sheet = lang_table.sheet_by_name("language")
     print("languageList", languageList)
-    time.sleep(2)
+    # time.sleep(2)
 
     export_book, export_sheet = create_export_xlsx()
 
@@ -196,8 +205,7 @@ def main():
                 sheetname = "language"
                 raw_sheet = raw_table.sheet_by_name(sheetname)
 
-                global row_index
-                row_index = 4
+                global export_row_index
 
                 for row in range(4, raw_sheet.nrows):
                     key = raw_sheet.cell_value(row, 0)
