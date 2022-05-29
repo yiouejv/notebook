@@ -94,6 +94,8 @@
 
 <a href="汇编/汇编指令.md">汇编指令</a>
 
+<a href="汇编/内存布局.md">内存布局</a>
+
 <h2>解决方案</h2>
 
 <a href="解决方案/vmlinux.md">window共享文件夹给vm linux</a>
