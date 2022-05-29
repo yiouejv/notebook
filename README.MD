@@ -61,6 +61,8 @@
 
 <a href="tool/skill_lang.py">4. python 技能表导出(主要记录操作excel)</a>
 
+<a href="tool/lang_merge.py">5. python from excel to excel with equal, export not equal</a>
+
 
 <h2>golang</h2>
 
