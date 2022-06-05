@@ -13,3 +13,11 @@ AfxMessageBox(str);
 ```c++
 ShellExecute(NULL, CString("open"), CString("https://github.com/yiouejv/notebook"), NULL, NULL, SW_SHOWNORMAL);
 ```
+
+<h2>check box</h2>
+
+1. 是否选中
+
+```c++
+bool checked = IsDlgButtonChecked(id);
+```
