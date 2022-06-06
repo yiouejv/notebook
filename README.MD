@@ -103,3 +103,5 @@
 <a href="解决方案/vmlinux.md">window共享文件夹给vm linux</a>
 
 <h2><a href="mfc.md">mfc 笔记</a></h2>
+
+<h2><a href="软件破解.md">软件破解</a></h2>
