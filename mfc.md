@@ -21,3 +21,32 @@ ShellExecute(NULL, CString("open"), CString("https://github.com/yiouejv/notebook
 ```c++
 bool checked = IsDlgButtonChecked(id);
 ```
+
+
+<h2>WriteMemory</h2>
+
+```c++
+void WriteMemory(void *value, DWORD valueSize, ...)
+{
+	if (value == NULL || valueSize == 0 || g_processHandle == NULL) return;
+
+	DWORD tempValue = 0;
+
+	va_list addresses;
+	va_start(addresses, valueSize);
+	DWORD offset = 0;
+	DWORD lastAddress = 0;
+	while ((offset = va_arg(addresses, DWORD)) != -1)
+	{
+		lastAddress = tempValue + offset;
+		::ReadProcessMemory(g_processHandle, (LPCVOID)lastAddress, &tempValue, sizeof(DWORD), NULL);
+	}
+	va_end(addresses);
+
+	::WriteProcessMemory(g_processHandle, (LPVOID)lastAddress, value, valueSize, NULL);
+}
+
+void WriteMemory(void *value, DWORD valueSize, DWORD address) {
+	WriteMemory(value, valueSize, address, -1);
+}
+```
