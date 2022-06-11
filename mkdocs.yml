@@ -1,0 +1,70 @@
+site_name: 杨小哥 note
+
+theme:
+  name: material  # 安装pip install mkdocs mkdocs-material
+  language: 'zh'
+  logo: logo.png
+  favicon: favicon.ico
+  custom_dir: overrides
+
+  # 黑夜模式
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+  features:
+    # 锚跟踪
+    - navigation.tracking
+    # 导航 tab
+    - navigation.tabs
+    # 导航栏加载效果
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.indexes
+    # XHR
+    - navigation.instant
+    - toc.follow
+
+extra:
+  search:  # 支持中文搜索
+    language: 'jp'
+
+
+# site_favicon: favicon.ico
+site_author: yiouejv
+site_name: 杨小哥的笔记！
+repo_name: github.com/yiouejv/notebook
+repo_url: https://github.com/yiouejv/notebook
+
+
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+      linenums: false
+  - toc:
+      permalink: true
+  - footnotes
+  - meta
+  - def_list
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_png
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist
+  - pymdownx.tilde
