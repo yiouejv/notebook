@@ -21,7 +21,9 @@ yum 提供了查找、安装、删除某一个、一组甚至全部软件包的�
 
 8. 清除缓存命令:
 
+```
 yum clean packages: 清除缓存目录下的软件包
 yum clean headers: 清除缓存目录下的 headers
 yum clean oldheaders: 清除缓存目录下旧的 headers
 yum clean, yum clean all (= yum clean packages; yum clean oldheaders) :清除缓存目录下的软件包及旧的 headers
+```

@@ -15,11 +15,11 @@ wget 非常稳定，它在带宽很窄的情况下和不稳定网络中有很强
 
 这对从那些限定了链接时间的服务器上下载大文件非常有用。
 
-<h2>命令格式</h2>
+## 命令格式
 
 wget [参数] [URL地址]
 
-<h2>命令参数</h2>
+## 命令参数
 
 ```
 -V, –version 显示wget的版本后退出
@@ -39,7 +39,7 @@ wget [参数] [URL地址]
 –sslcertfile=FILE 可选客户端证书 –sslcertkey=KEYFILE 可选客户端证书的KEYFILE –egd-file=FILE 指定EGD socket的文件名
 ```
 
-<h2>下载参数</h2>
+## 下载参数
 
 ```
 -bind-address=ADDRESS 指定本地使用地址(主机名或IP，当本地有多个IP或名字时使用)
@@ -131,7 +131,7 @@ retr-symlinks 在递归的时候，将链接指向文件(而不是目录)
 wget -S –spider url 不下载只显示过程
 ```
 
-<h2>使用实例</h2>
+## 使用实例
 
 ```
 实例1：使用wget下载单个文件

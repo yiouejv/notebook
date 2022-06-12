@@ -32,6 +32,7 @@ def get_changed_file(root):
 
 def main():
     watch_root_list = [
+        root + "docs"
     ]
     docs_root = root + "docs"
     for sub in os.listdir(docs_root):

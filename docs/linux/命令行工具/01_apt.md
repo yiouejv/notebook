@@ -7,14 +7,14 @@ apt 命令的引入就是为了解决命令过于分散的问题，它包括了 
 
 简单来说就是：apt = apt-get、apt-cache 和 apt-config 中最常用命令选项的集合。
 
-- apt install apt-get install 安装软件包
-- apt remove apt-get remove 移除软件包
-- apt purge apt-get purge 移除软件包及配置文件
-- apt update apt-get update 刷新存储库索引
-- apt upgrade apt-get upgrade 升级所有可升级的软件包
-- apt autoremove apt-get autoremove 自动删除不需要的包
-- apt full-upgrade apt-get dist-upgrade 在升级软件包时自动处理依赖关系
-- apt search apt-cache search 搜索应用程序
-- apt show apt-cache show 显示装细节
+- apt install: apt-get install 安装软件包
+- apt remove: apt-get remove 移除软件包
+- apt purge: apt-get purge 移除软件包及配置文件
+- apt update: apt-get update 刷新存储库索引
+- apt upgrade: apt-get upgrade 升级所有可升级的软件包
+- apt autoremove: apt-get autoremove 自动删除不需要的包
+- apt full-upgrade: apt-get dist-upgrade 在升级软件包时自动处理依赖关系
+- apt search: apt-cache search 搜索应用程序
+- apt show: apt-cache show 显示装细节
 
 
