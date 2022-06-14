@@ -30,6 +30,10 @@ theme:
     # XHR
     - navigation.instant
     - toc.follow
+    # 返回顶部
+    - navigation.top
+    # 代码注释
+    - content.code.annotate
 
 extra:
   search:  # 支持中文搜索
