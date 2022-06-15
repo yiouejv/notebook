@@ -26,6 +26,8 @@ def get_changed_file(root):
             if sub.startswith("."): continue
             ret.extend(get_changed_file(filename))
         elif os.path.isfile(filename):
+            if not filename.endswith(".md"):
+                continue
             if is_file_changed(filename):
                 ret.append(filename)
     return ret

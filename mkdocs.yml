@@ -1,5 +1,3 @@
-site_name: 杨小哥 note
-
 theme:
   name: material  # 安装pip install mkdocs mkdocs-material
   language: 'zh'
@@ -40,7 +38,6 @@ extra:
     language: 'jp'
 
 
-# site_favicon: favicon.ico
 site_author: yiouejv
 site_name: 杨小哥的笔记！
 repo_name: github.com/yiouejv/notebook

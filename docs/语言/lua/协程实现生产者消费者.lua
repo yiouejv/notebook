@@ -1,0 +1,19 @@
+--require("coroutine")
+
+local producer = coroutine.create(function()
+    local i = 0
+    while true do
+        i = 1 + i
+        coroutine.yield(i)
+    end
+end)
+
+
+local consume = coroutine.create(function()
+    while true do
+        local status, i = coroutine.resume(producer)
+        print(status, i)
+    end
+end)
+
+coroutine.resume(consume)
