@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="vue3.js"></script>
+</head>
+<body>
+    <div id="app">
+        <img v-bind:src="src">
+    </div>
+    <script>
+        let app = Vue.createApp({
+            data: function() {
+                return {
+                    src : "https://img12.360buyimg.com/seckillcms/s750x360_jfs/t1/214447/10/20191/15346/62aaf7c9Ec0432cd2/ea3e421343a22f9c.jpg!cc_750x360.webp",
+                };
+            },
+        }).mount("#app");
+    </script>
+</body>
+</html>

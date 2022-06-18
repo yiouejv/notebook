@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="vue3.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p>{{ name }}</p>
+        <p v-once>{{ name }}</p>
+        <button @click="clickChangeName">改变名字</button>
+    </div>
+    <script>
+        let app = Vue.createApp({
+            data: function() {
+                return {
+                    name : "yiouejv",
+                };
+            },
+            methods: {
+                clickChangeName: function() {
+                    this.name = "yangxiaoge"
+                },
+            },
+        }).mount("#app");
+    </script>
+</body>
+</html>

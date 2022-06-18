@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="vue3.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p>{{ msg }}</p>
+        <button @click="msg='你好'">改变</button>
+    </div>
+    <script>
+        let app = Vue.createApp({
+            data: function() {
+                return {
+                    msg : "hello world",
+                };
+            },
+            watch: {
+                msg : function(newValue, oldValue) {
+                    console.log(newValue);
+                    console.log(oldValue);
+                    // 执行异步操作，或者复杂逻辑代码
+                },
+            },
+        }).mount("#app");
+    </script>
+</body>
+</html>

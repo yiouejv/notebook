@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="vue3.js"></script>
+</head>
+<body>
+    <div id="counter">
+        <p>{{ num }}</p>
+        <p>{{ name }}</p>
+    </div>
+    <script>
+        const Counter = {
+            data:function() {
+                return {
+                    num : 0,
+                    name : "xxx",
+                }
+            }
+        }
+        let app = Vue.createApp(Counter).mount("#counter")
+        console.log(app);
+    </script>
+</body>
+</html>
