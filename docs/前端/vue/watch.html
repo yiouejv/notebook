@@ -9,19 +9,27 @@
     <div id="app">
         <p>{{ msg }}</p>
         <button @click="msg='你好'">改变</button>
+        <input v-model="msg">
     </div>
     <script>
         let app = Vue.createApp({
             data: function() {
                 return {
-                    msg : "hello world",
+                    msg : "hello world xxxx",
                 };
             },
             watch: {
-                msg : function(newValue, oldValue) {
-                    console.log(newValue);
-                    console.log(oldValue);
-                    // 执行异步操作，或者复杂逻辑代码
+                msg : {
+                    immediate : true,  // 初始化的时候调用函数
+                    handler : function(newValue, oldValue) {
+                        console.log(newValue);
+                        console.log(oldValue);
+                        // 执行异步操作，或者复杂逻辑代码
+                        if (newValue.length < 5 || newValue.length > 10) {
+                            console.log("tips")
+                        }
+                    },
+                    deep : true,  // 深度监听，会监听到对象内部属性的变化
                 },
             },
         }).mount("#app");

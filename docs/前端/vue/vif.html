@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="vue3.js"></script>
+</head>
+<body>
+    <div id="app">
+        <p v-if="age > 18">我是个成年人</p>
+        <p v-else-if="age==18">我今天正好18</p>
+        <p v-else>我是个小朋友</p>
+        <button @click="age=18">改变年龄为18</button>
+    </div>
+
+    <script>
+        let app = Vue.createApp({
+            data : function() {
+                return {
+                    age : 13,
+                };
+            }
+        }).mount("#app")
+    </script>
+</body>
+</html>

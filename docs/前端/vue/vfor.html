@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="vue3.js"></script>
+</head>
+<body>
+    <div id="app">
+        <ul>
+            <li v-for="(person, index) in persons" :key="index">
+                {{person}} -- {{index}}
+            </li>
+            <li v-for="(value, key, index) in obj" :key="index">
+                {{ value }} -- {{ key }} -- {{ index }}
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        let app = Vue.createApp({
+            data : function() {
+                return {
+                    persons : ["xxx1", "xxx2", "xxx3"],
+                    obj : {
+                        name : "xxx",
+                        age : 18,
+                    },
+                };
+            }
+        }).mount("#app")
+    </script>
+</body>
+</html>
