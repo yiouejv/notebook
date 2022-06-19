@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="vue3.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="yioajax.js"></script>
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+    <div id="app">
+        <input v-model="name" />用户名
+        <input v-model="phone" />手机号
+        <button @click.prevent="submit">提交</button>
+    </div>
+    <script>
+       let app = Vue.createApp({
+          data : function() {
+              return {
+                  name : "xiaoge",
+              }
+          },
+          computed : {
+          },
+          methods : {
+              submit : function() {
+                console.log(this.name);
+                console.log(this.phone);
+                yioajax.post({
+                    'url': '/login/',
+                    'data': {
+                        'phone': this.phone,
+                        'password': this.name,
+                    },
+                    'success': function (data) {
+                        if (data.status==200){
+                            console.log(data);
+                        } else {
+                            console.log("error");
+                        }
+                    },
+                    'dataType': 'json'
+                });
+              }
+          },
+          watch : {
+          },
+       }).mount("#app");
+    </script>
+</body>
+</html>
