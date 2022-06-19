@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="vue3.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="checkbox" id="checkbox" v-model="checked" />
+        <h2>{{ checked }}</h2>
+
+        <input type="checkbox" v-model="fruits" value="苹果">苹果
+        <input type="checkbox" v-model="fruits" value="西瓜">西瓜
+        <input type="checkbox" v-model="fruits" value="葡萄">葡萄
+        <input type="checkbox" v-model="fruits" value="哈密瓜">哈密瓜
+        <h2>{{ fruits }}</h2>
+
+        <input type="radio" v-model="sex" value="男">男
+        <input type="radio" v-model="sex" value="女">女
+        <h2>{{ sex }}</h2>
+
+        <select v-model="city">
+            <option value="张家界">张家界</option>
+            <option value="长沙">长沙</option>
+            <option value="益阳">益阳</option>
+        </select>
+        <h2>{{ city }}</h2>
+
+        <select v-model="citys" multiple>
+            <option value="张家界">张家界</option>
+            <option value="长沙">长沙</option>
+            <option value="益阳">益阳</option>
+        </select>
+        <h2>{{ citys }}</h2>
+    </div>
+
+    <script>
+        let app = Vue.createApp({
+            data : function() {
+                return {
+                    fruits : [],
+                    checked : false,
+                    sex : "男",
+                    city : "张家界",
+                    citys : [],
+                };
+            }
+        }).mount("#app")
+    </script>
+</body>
+</html>

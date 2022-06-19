@@ -358,3 +358,180 @@ v-if 指令用于条件性地渲染一块内容。这块内容只会在指令的
 </body>
 </html>
 ```
+
+## 事件修饰符
+
+在事件处理程序中调用 event.preventDefault() 或 event.stopPropagation() 是非常常见的需求。
+
+尽管我们可以在方法中轻松实现这点，但更好的方式是：方法只有纯粹的数据逻辑，而不是去处理 DOM 事件细节。
+
+为了解决这个问题，Vue.js 为 v-on 提供了事件修饰符。
+
+- .stop
+- .prevent
+- .capture
+- .self
+- .once : 只会触发一次
+- .passive
+
+```html
+<!-- 阻止单击事件继续冒泡 -->
+<a @click.stop="doThis"></a>
+
+<!-- 提交事件不再重载页面 -->
+<form @submit.prevent="onSubmit"></form>
+
+<!-- 修饰符可以串联 -->
+<a @click.stop.prevent="doThat"></a>
+
+<!-- 只有修饰符 -->
+<form @submit.prevent></form>
+
+<!-- 添加事件监听器时使用事件捕获模式 -->
+<!-- 即内部元素触发的事件先在此处理，然后才交由内部元素进行处理 -->
+<div @click.capture="doThis">...</div>
+
+<!-- 只当在 event.target 是当前元素自身时触发处理函数 -->
+<!-- 即事件不是从内部元素触发的 -->
+<div @click.self="doThat">...</div>
+```
+
+### 按键修饰符
+
+在监听键盘事件时，我们经常需要检查特定的按键。Vue 允许为 v-on 或者 @ 在监听键盘事件时添加按键修饰符：
+
+```html
+<!-- 只有在 `key` 是 `Enter` 时调用 `vm.submit()` -->
+<input @keyup.enter="submit" />
+```
+Vue 为最常用的键提供了别名：
+
+- .enter
+- .tab
+- .delete (捕获“删除”和“退格”键)
+- .esc
+- .space
+- .up
+- .down
+- .left
+- .right
+
+## 表单输入绑定
+
+```
+你可以用 v-model 指令在表单 <input>、<textarea> 及 <select> 元素上创建双向数据绑定。它会根据控件类型自动选取正确的方法来更新元素。
+
+尽管有些神奇，但 v-model 本质上不过是语法糖。它负责监听用户的输入事件来更新数据，并在某种极端场景下进行一些特殊处理。
+```
+
+
+### 文本 (Text)
+
+```html
+你可以用 v-model 指令在表单 <input>、<textarea> 及 <select> 元素上创建双向数据绑定。它会根据控件类型自动选取正确的方法来更新元素。尽管有些神奇，但 v-model 本质上不过是语法糖。它负责监听用户的输入事件来更新数据，并在某种极端场景下进行一些特殊处理。
+```
+
+### 复选框 checkbox
+
+#### 单个复选框
+
+单个复选框，绑定到布尔值：
+
+```html
+<input type="checkbox" id="checkbox" v-model="checked" />
+<label for="checkbox">{{ checked }}</label>
+```
+
+#### 多个复选框
+
+```html
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="vue3.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="checkbox" id="checkbox" v-model="checked" />
+        <h2>{{ checked }}</h2>
+
+        <input type="checkbox" v-model="fruits" value="苹果">苹果
+        <input type="checkbox" v-model="fruits" value="西瓜">西瓜
+        <input type="checkbox" v-model="fruits" value="葡萄">葡萄
+        <input type="checkbox" v-model="fruits" value="哈密瓜">哈密瓜
+        <h2>{{ fruits }}</h2>
+    </div>
+
+    <script>
+        let app = Vue.createApp({
+            data : function() {
+                return {
+                    fruits : [],
+                    checked : false,
+                };
+            }
+        }).mount("#app")
+    </script>
+</body>
+</html>
+```
+
+### 单选框
+
+```html
+<input type="radio" v-model="sex" value="男">男
+<input type="radio" v-model="sex" value="女">女
+```
+
+### 选项框
+
+#### 单选项框
+
+```html
+<select v-model="city">
+    <option value="张家界">张家界</option>
+    <option value="长沙">长沙</option>
+    <option value="益阳">益阳</option>
+</select>
+<h2>{{ city }}</h2>
+```
+
+#### 多选项框
+
+```html
+<select v-model="citys" multiple>
+    <option value="张家界">张家界</option>
+    <option value="长沙">长沙</option>
+    <option value="益阳">益阳</option>
+</select>
+```
+
+## v-model 修饰符
+
+### .lazy
+
+在默认情况下，v-model 在每次 input 事件触发后将输入框的值与数据进行同步 (除了上述输入法组织文字时)。你可以添加 lazy 修饰符，从而转为在 change 事件之后进行同步：
+
+```html title="在“change”时而非“input”时更新"
+<input v-model.lazy="msg" />
+```
+
+### .number
+
+如果想自动将用户的输入值转为数值类型，可以给 v-model 添加 number 修饰符：
+
+```html title="自动将原始字符串转换为数字"
+<input v-model.number="age" type="text" />
+```
+
+当输入类型为 text 时这通常很有用。如果输入类型是 number，Vue 能够自动将原始字符串转换为数字，无需为 v-model 添加 .number 修饰符。如果这个值无法被 parseFloat() 解析，则返回原始的值。
+
+### .trim
+
+如果要自动过滤用户输入的首尾空白字符，可以给 v-model 添加 trim 修饰符：
+
+```html title="自动过滤用户输入的首尾空白字符"
+<input v-model.trim="msg" />
+```
