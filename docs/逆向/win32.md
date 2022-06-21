@@ -232,3 +232,202 @@ int main(int argc, const char *argv) {
     return 0;
 };
 ```
+
+## 临界资源, 临界区
+
+- 临界资源：系统需要，必须互斥访问的资源.
+- 临界区: 访问临界资源的一段代码.
+
+## 临界区实现线程锁
+
+```c++ title="创建全局变量"
+CRITICAL_SECTION cs;
+```
+
+```c++ title="初始化全局变量"
+InitializeCriticalSection(&cs);
+```
+
+```c++ title="实现临界区"
+EnterCriticalSection(&cs);
+// 使用临界资源
+LeaveCriticalSection(&cs);
+```
+
+```c++ title="临界区使用示例"
+#include <iostream>
+#include <windows.h>
+#include <stdio.h>
+using namespace std;
+
+CRITICAL_SECTION cs;
+int g_count = 10;
+
+DWORD WINAPI ThreadProc(LPVOID lpParameter) {
+    EnterCriticalSection(&cs);
+    while (g_count > 0) {
+        printf("还有%d张票\n", g_count);
+        --g_count;
+        printf("卖出1张还有 %d 张\n", g_count);
+    }
+    LeaveCriticalSection(&cs);
+    return 0;
+}
+
+int main(int argc, const char *argv) {
+    int n = 10;
+    const int arrSize = 2;
+    DWORD r1 = -1, r2 = -1;
+    HANDLE arrHandle[arrSize]{};
+    InitializeCriticalSection(&cs);
+
+    arrHandle[0] = CreateThread(
+        NULL,
+        0,
+        ThreadProc,
+        &n,
+        0,
+        NULL
+    );
+    arrHandle[1] = CreateThread(
+        NULL,
+        0,
+        ThreadProc,
+        &n,
+        0,
+        NULL
+    );
+    WaitForMultipleObjects(2, arrHandle, TRUE, INFINITE);
+    GetExitCodeThread(arrHandle[0], &r1);
+    GetExitCodeThread(arrHandle[1], &r2);
+    cout << "r1: " << r1 << endl;
+    cout << "r2: " << r2 << endl;
+    return 0;
+};
+```
+
+该示例展示了全局变量的临界资源实现的线程锁。
+
+内核级的临界资源怎么办？
+
+## 互斥体
+
+互斥体，和临界资源很像，但是互斥体属于内核级别的临界资源
+
+可以作用于不同进程之间的线程互斥。
+
+```c++ title="process A"
+#include <iostream>
+#include <windows.h>
+#include <stdio.h>
+using namespace std;
+
+int main(int argc, const char *argv) {
+    // 创建一个互斥体
+    HANDLE mutex = CreateMutex(NULL, TRUE, TEXT("XYZ"));
+
+    // 等待获取互斥体
+    WaitForSingleObject(mutex, INFINITE);
+
+    for (int i = 0; i < 10; ++i) {
+        cout << "Process A: " << i << endl;
+        Sleep(1000);
+    }
+
+    ReleaseMutex(mutex);
+    return 0;
+};
+```
+
+```c++ title="process B"
+#include <iostream>
+#include <windows.h>
+#include <stdio.h>
+using namespace std;
+
+int main(int argc, const char *argv) {
+    // 创建一个互斥体
+    HANDLE mutex = CreateMutex(NULL, TRUE, TEXT("XYZ"));
+
+    // 等待获取互斥体
+    WaitForSingleObject(mutex, INFINITE);
+
+    for (int i = 0; i < 10; ++i) {
+        cout << "Process B: " << i << endl;
+        Sleep(1000);
+    }
+
+    ReleaseMutex(mutex);
+    return 0;
+};
+```
+
+运行两个程序，你会发现只有当一个进程执行结束，释放了互斥体之后，另一个进程才会运行到for循环。
+
+### CreateMutex
+
+```c++
+HANDLE CreateMutex( 
+  LPSECURITY_ATTRIBUTES lpMutexAttributes, 
+  BOOL bInitialOwner, 
+  LPCTSTR lpName 
+);
+```
+
+- 第二个参数：
+
+如果此值为 TRUE 并且调用者创建了互斥锁，则调用线程将获得互斥锁对象的所有权。
+
+否则，调用线程不会获得互斥锁的所有权。要确定调用者是否创建了互斥锁，
+
+- 函数返回值:
+
+如果函数执行成功，则返回互斥对象的句柄，如果在函数调用之前命名的互斥对象存在，则函数返回现有对象的句柄, GetLastError 返回 ERROR\_ALREADY\_EXISTS。
+
+创建互斥体失败, NULL 表示失败。要获取扩展错误信息，请调用 GetLastError
+
+### 利用互斥体防止多开
+
+```c++ title="防止多开"
+#include <iostream>
+#include <windows.h>
+#include <stdio.h>
+using namespace std;
+
+int main(int argc, const char *argv) {
+    // 创建一个互斥体
+    HANDLE mutex = CreateMutex(NULL, TRUE, TEXT("XYZ"));
+    if (mutex != NULL) {
+        if (GetLastError() == ERROR_ALREADY_EXISTS) {
+            // 说明是第二次打开程序
+            CloseHandle(mutex);
+            return 0;
+        }
+    } else {
+        // 创建互斥体失败
+        int err = GetLastError();
+        cout << "createMutex failed, errorno: " << err << endl;
+        CloseHandle(mutex);
+        return 0;
+    }
+
+    // 等待获取互斥体
+    WaitForSingleObject(mutex, INFINITE);
+
+    for (int i = 0; i < 10; ++i) {
+        cout << "Process A: " << i << endl;
+        Sleep(1000);
+    }
+
+    ReleaseMutex(mutex);
+    return 0;
+};
+```
+
+## 线程锁和互斥体的区别
+
+1. 线程锁只能用于单个进程间的线程控制
+2. 互斥体可以设置等待超时，线程锁不能, 线程意外终止时，mutex 可以避免无限等待
+3. mutex 效率没有线程锁高
+
+
