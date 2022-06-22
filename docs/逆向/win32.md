@@ -233,12 +233,14 @@ int main(int argc, const char *argv) {
 };
 ```
 
-## 临界资源, 临界区
+## 线程互斥
+
+### 临界资源, 临界区
 
 - 临界资源：系统需要，必须互斥访问的资源.
 - 临界区: 访问临界资源的一段代码.
 
-## 临界区实现线程锁
+### 临界区实现线程锁
 
 ```c++ title="创建全局变量"
 CRITICAL_SECTION cs;
@@ -310,7 +312,7 @@ int main(int argc, const char *argv) {
 
 内核级的临界资源怎么办？
 
-## 互斥体
+### 互斥体
 
 互斥体，和临界资源很像，但是互斥体属于内核级别的临界资源
 
@@ -364,7 +366,7 @@ int main(int argc, const char *argv) {
 
 运行两个程序，你会发现只有当一个进程执行结束，释放了互斥体之后，另一个进程才会运行到for循环。
 
-### CreateMutex
+#### CreateMutex
 
 ```c++
 HANDLE CreateMutex( 
@@ -386,7 +388,7 @@ HANDLE CreateMutex(
 
 创建互斥体失败, NULL 表示失败。要获取扩展错误信息，请调用 GetLastError
 
-### 利用互斥体防止多开
+#### 利用互斥体防止多开
 
 ```c++ title="防止多开"
 #include <iostream>
@@ -424,10 +426,93 @@ int main(int argc, const char *argv) {
 };
 ```
 
-## 线程锁和互斥体的区别
+#### 线程锁和互斥体的区别
 
 1. 线程锁只能用于单个进程间的线程控制
 2. 互斥体可以设置等待超时，线程锁不能, 线程意外终止时，mutex 可以避免无限等待
 3. mutex 效率没有线程锁高
 
+## 线程同步
 
+### Event
+
+```c++
+HANDLE CreateEvent(
+    LPSECURITY_ATTRIBUTES lpEventAttributes,  // 安全描述符
+    BOOL bManualReset,
+    BOOL bInitialState,                       // 初始状态
+    LPCTSTR lpName,                           // object name
+)
+```
+
+- bManualReset:
+    - true: 需手动重置事件对象
+    - false: 自动重置事件对象
+- bInitialState:
+    - true: 有信号
+    - false: 无信号
+
+切换信号需要使用SetEvent 函数
+
+```c++ title="Event实现线程同步，生产者消费者模型"
+#include <iostream>
+#include <windows.h>
+#include <stdio.h>
+using namespace std;
+
+int g_count = 0;
+HANDLE g_setEvent;
+HANDLE g_getEvent;
+
+// 生产者线程
+DWORD WINAPI ThreadProc1(LPVOID lpParameter) {
+    for (int i = 0; i < 10; ++i) {
+        WaitForSingleObject(g_setEvent, INFINITE);
+        ++g_count;
+        cout << "生产者生产了一个产品: " << g_count << endl;
+        SetEvent(g_getEvent);
+    }
+    return 0;
+}
+
+// 消费者线程
+DWORD WINAPI ThreadProc2(LPVOID lpParameter) {
+    for (int i = 0; i < 10; ++i) {
+        WaitForSingleObject(g_getEvent, INFINITE);
+        --g_count;
+        cout << "消费者消费了一个产品: " << g_count << endl;
+        SetEvent(g_setEvent);
+
+    }
+    return 0;
+}
+
+int main(int argc, const char *argv) {
+    g_setEvent = CreateEvent(NULL, FALSE, TRUE, NULL);
+    g_getEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+    HANDLE arrHandle[2]{};
+
+    arrHandle[0] = CreateThread(
+        NULL,
+        0,
+        ThreadProc1,
+        NULL,
+        0,
+        NULL
+    );
+    arrHandle[1] = CreateThread(
+        NULL,
+        0,
+        ThreadProc2,
+        NULL,
+        0,
+        NULL
+    );
+    WaitForMultipleObjects(2, arrHandle, TRUE, INFINITE);
+    CloseHandle(arrHandle[0]);
+    CloseHandle(arrHandle[1]);
+    CloseHandle(g_setEvent);
+    CloseHandle(g_getEvent);
+    return 0;
+};
+```
