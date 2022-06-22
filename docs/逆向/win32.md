@@ -27,7 +27,9 @@ TCHAR str[] = TEXT("中国");
 
 句柄的存在就是把内核层和用户层隔离开，让用户没法直接操作内核层。
 
-每个进程都有一张属于自己的句柄表，操作内核有一个全局句柄表。
+每个进程都有一张属于自己的句柄表，句柄表示为 __HANDLE__
+
+操作内核有一个全局句柄表，句柄表示为 __HWND__
 
 ## 进程API
 
@@ -516,3 +518,13 @@ int main(int argc, const char *argv) {
     return 0;
 };
 ```
+
+## windows 三个重要的模块
+
+- kernel32.dll: 进程，线程，内存管理等. 
+- user32.dll: 提供 gui 编程, 基于存在的图形界面编程
+- gdi32.dll: 提供 gdi 编程，自定义图形界面
+
+kernel32.dll 实际上只是提供了接口，真正的实现是由内核中的 ntoskrnl.exe 实现的
+
+user32.dll, gdi32.dll 都是基于内核的 win32k.sys 实现的
