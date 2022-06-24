@@ -19,3 +19,7 @@ Xposed（也被称作Xposed框架、XP框架、Xposed framework），是一个�
 ## 安装 DisableFlagSecure
 
 打开 xposedInstall 软件，从 `menu->下载` 安装 DisableFlagSecure 模块, 安装完启动
+
+## 其他插件
+
+- XPrivacy: 隐私管理
