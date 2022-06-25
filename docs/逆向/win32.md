@@ -528,3 +528,128 @@ int main(int argc, const char *argv) {
 kernel32.dll 实际上只是提供了接口，真正的实现是由内核中的 ntoskrnl.exe 实现的
 
 user32.dll, gdi32.dll 都是基于内核的 win32k.sys 实现的
+
+## 虚拟内存地址划分
+
+|分区 | x86 32 位windows|
+|----- |-----------|
+|空指针赋值区| 0x00000000 - 0x0000ffff |
+| 用户模式去 | 0x00010000 - 0x7ffeffff |
+| 64kb禁入区 | 0x7fff0000 - 0x7fffffff |
+| 内核       | 0x80000000 - 0xffffffff |
+
+## 内存的申请和释放
+
+- private memory: 某一个进程独占的物理内存
+- mapped memory: 多个进程共享的物理内存
+
+### VirtualAlloc, VirtualAllocEx 申请private memory
+
+```c++ title="VirtualAlloc"
+LPVOID VirtualAlloc (
+    LPVOID lpAddress,  // 要分配的内存区域的地址, 通常为NULL
+    DWORD dwSize,      // 分配的大小, 通常为页的整数倍, 0x1000 一页 4kb
+    DWORD flAllocationType,  // 分配的类型
+    DWORD flProtect         // 该内存的初始保护属性
+);
+```
+
+```c++ title="申请8k独占的内存"
+#include <iostream>
+#include <windows.h>
+using namespace std;
+
+int main(int argc, const char *argv) {
+    // MEM_COMMIT: 分配真实的物理内存
+    // MEM_RESERVE: 占用虚拟内存的空间，不分配真实的物理内存
+    LPVOID p = VirtualAlloc(NULL, 0x1000 * 2, MEM_COMMIT, PAGE_READONLY);
+    cout << p << endl;
+
+    VirtualFree(p, 0, MEM_RELEASE);
+    return 0;
+};
+```
+
+### VirtualFree  释放内存
+
+```c++
+BOOL VirtualFree(
+  LPVOID lpAddress,  // 指向要释放的页面区域的基地址的指针
+  DWORD dwSize,      // 释放的大小，申请多大，释放多大
+  DWORD dwFreeType
+);
+
+// dwFreeType
+MEM_DECOMMIT: 取消申请的物理内存，虚拟内存还会占用
+MEM_RELEASE: 释放虚拟内存的占用, dwSize 必需为0
+```
+
+### CreateFileMapping 申请 mapped memory
+
+MapViewOffile 绑定物理页与线性地址(虚拟内存)的映射
+
+
+## 文件系统
+
+文件系统是操作系统用于管理磁盘上文件的方法和数据结构。
+
+|   | NTFS | FAT32 |
+----|------|-------|
+|磁盘分区容量| 2T | 32G |
+|单个文件容量| 4G以上 | 最大4G |
+|EFS 加密 | 支持 | 不支持 |
+|磁盘配额 | 支持 | 不支持 |
+
+### 文件相关api
+
+- CreateFile: 创建文件
+- CloseHandle: 关闭文件的句柄
+- GetFileSize: 获取文件的长度
+- GetFileAttributes, GetFileAttributesEx: 获取文件的属性和信息
+- ReadFile, WriteFile, CopyFile, DeleteFile: 操作文件
+- FindFirstFile, FindNextFile: 查找文件
+
+### 卷相关api
+
+卷: 每一个磁盘分区
+
+- GetLogicalDrives: 获取卷
+- GetLogicalDrivesStrings: 获取一个卷的昵称
+- GetDriveType: 获取卷的类型
+- GetVolumeInformation: 获取卷的信息 
+
+### 目录相关api
+
+- CreateDirectory: 创建目录
+- RemoveDirectory: 删除目录
+- MoveFile: 修改目录名称
+- GetCurrentDirectory: 获取程序当前目录
+- SetCurrentDirectory: 设置程序当前目录
+
+```c++
+#include <iostream>
+#include <windows.h>
+#include <cstdio>
+using namespace std;
+
+int main(int argc, const char *argv) {
+    // 1. 创建目录
+    CreateDirectory(TEXT("E:\\testDir"), NULL);
+
+    // 2. 移除目录
+    /* RemoveDirectory(TEXT("E:\\testDir")); */
+
+    // 3. 修改目录名称
+    MoveFile(TEXT("E:\\testDir"), TEXT("E:\\testDir2"));
+
+    // 4. 获取当前目录
+    TCHAR szCurrentDir[MAX_PATH]{};
+    GetCurrentDirectory(MAX_PATH, szCurrentDir);
+    printf("currentDir: %ws \n", szCurrentDir);
+
+    // 5. 设置程序当前目录
+    SetCurrentDirectory(TEXT("C:\\"));
+    CreateDirectory(TEXT("aaaa"), NULL);
+    return 0;
+};
+```
