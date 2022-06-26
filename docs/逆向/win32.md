@@ -126,6 +126,15 @@ int main(int argc, const char *argv) {
 };
 ```
 
+### 获取进程句柄
+
+```c++ title="获取进程句柄"
+HWND gameHandle = FindWindow(CString("MainWindow"), CString("植物大战僵尸中文版"));
+DWORD pid;
+GetWindowThreadProcessId(gameHandle, &pid);
+HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
+```
+
 ### 等待线程结束
 
 - WaitForSingleObject: 等待单个线程结束
@@ -653,3 +662,327 @@ int main(int argc, const char *argv) {
     return 0;
 };
 ```
+
+## 链接库
+
+### 动态链接库
+
+动态链接库可以只在调用的时候加载，使用完即卸载，解决了静态链接库生成的可执行文件体积大的问题.
+
+所有的链接库都只会加载一份，内核中存在一份其他进程再加载都不会重复加载。
+
+下面演示一个动态链接库的例子：
+
+#### dll 创建
+
+```c++ title="dllmain.cpp"
+#include "pch.h"
+#include <stdio.h>
+
+
+BOOL APIENTRY DllMain( HMODULE hModule,
+                       DWORD  ul_reason_for_call,
+                       LPVOID lpReserved
+                     )
+{
+    switch (ul_reason_for_call)
+    {
+    case DLL_PROCESS_ATTACH:
+        printf("DLL_PROCESS_ATTACH\n");
+        break;
+
+    case DLL_THREAD_ATTACH:
+        printf("DLL_THREAD_ATTACH\n");
+        break;
+
+    case DLL_THREAD_DETACH:
+        printf("DLL_THREAD_DETACH\n");
+        break;
+
+    case DLL_PROCESS_DETACH:
+        printf("DLL_PROCESS_DETACH\n");
+        break;
+    }
+    return TRUE;
+}
+```
+
+- HMODULE hModule: 谁加载了这个模块
+- `ul_reason_for_call`: 什么情况执行了DllMain函数
+
+
+```c++ title="mydll.h"
+#pragma once
+
+extern "C" _declspec(dllexport) int add(int x, int y);
+extern "C" _declspec(dllexport) int sub(int x, int y);
+```
+
+```c++ title="mydll.cpp"
+#include "pch.h"
+#include "mydll.h"
+
+int add(int x, int y) {
+    return x + y;
+}
+
+int sub(int x, int y) {
+    return x - y;
+}
+```
+
+#### 显式链接
+
+```c++ title="动态链接库显示加载的方式使用dll"
+#include <iostream>
+#include <windows.h>
+#include <cstdio>
+using namespace std;
+
+
+int main(int argc, const char *argv) {
+    // 1. 加载dll
+    HINSTANCE dll1 = LoadLibrary(TEXT("D:\\workspace\\library\\Dll1.dll"));
+    if (dll1 == NULL) {
+        printf("loadlibrary failed, errorcode: %d\n", GetLastError());
+        return 0;
+    }
+    // 2. 定义函数指针
+    typedef int(*pAdd)(int, int);
+    typedef int(*pSub)(int, int);
+
+    // 3. 获取函数地址
+    pAdd add = (pAdd)GetProcAddress(dll1, "add");
+    pSub sub = (pSub)GetProcAddress(dll1, "sub");
+
+    // 4. 调用函数
+    printf("a + b = %d\n", add(1, 2));
+    printf("a - b = %d\n", sub(1, 2));
+
+    // 5. 释放动态链接库
+    FreeLibrary(dll1);
+    return 0;
+};
+```
+
+#### 隐式链接
+
+1. 将 dll, lib 文件放到工程目录下
+
+dll 中包含一个导出表, 记录了当前模块提供了哪些函数
+
+```c++
+#pragma comment(lib, "Dll1.lib")
+extern "C" __declspec(dllimport) int add(int x, int y);
+extern "C" __declspec(dllimport) int sub(int x, int y);
+```
+
+这几行的功能，编译器会把当前的dll信息写入到当前exe的导入表里, 导入表里详细的记录了当前的exe需要哪些dll, 用到了dll中的具体哪些函数。
+
+
+```c++ title="隐式链接的方式"
+#include <iostream>
+#include <windows.h>
+#include <cstdio>
+using namespace std;
+
+
+#pragma comment(lib, "Dll1.lib")
+extern "C" __declspec(dllimport) int add(int x, int y);
+extern "C" __declspec(dllimport) int sub(int x, int y);
+
+int main(int argc, const char *argv) {
+    printf("a + b = %d\n", add(1, 2));
+    printf("a - b = %d\n", sub(1, 2));
+    return 0;
+};
+```
+
+## 创建远程线程
+
+CreateRemoteThread
+
+### 注入
+
+在第三方进程不知道或者不允许的情况下将模块或者代码写入对方进程空间，并设法执行的技术。
+
+已知的注入方式:
+
+- 远程线程注入
+- APC注入
+- 消息钩子注入
+- 注册表注入
+- 导入表注入
+- 输入法注入
+
+等等。
+
+### 远程注入示例
+
+```c++ title="win32_two.exe 被注入的程序"
+#include <iostream>
+#include <windows.h>
+#include <stdio.h>
+using namespace std;
+
+int main(int argc, const char *argv) {
+    while (true) {
+        printf("test app ...\n");
+        Sleep(1000);
+    }
+    return 0;
+};
+```
+
+```c++ title="要注入的dll"
+#include "pch.h"
+#include <stdio.h>
+
+DWORD WINAPI ThreadProc(LPVOID lpParameter) {
+    for (int i = 0; i < 100; ++i) {
+        printf("thread i: %d \n", i);
+        Sleep(500);
+    }
+    return 0;
+}
+
+
+BOOL APIENTRY DllMain( HMODULE hModule,
+                       DWORD  ul_reason_for_call,
+                       LPVOID lpReserved
+                     )
+{
+    switch (ul_reason_for_call)
+    {
+    case DLL_PROCESS_ATTACH:
+        CreateThread(
+            NULL,
+            0,
+            ThreadProc,
+            NULL,
+            0,
+            NULL
+        );
+        break;
+
+    case DLL_THREAD_ATTACH:
+        break;
+
+    case DLL_THREAD_DETACH:
+        break;
+
+    case DLL_PROCESS_DETACH:
+        break;
+    }
+    return TRUE;
+}
+```
+
+```c++ title="执行注入操作的程序"
+#include <iostream>
+#include <windows.h>
+#include <cstdio>
+using namespace std;
+
+
+BOOL LoadRemoteDll(HANDLE hProcess, const char *dllPath) {
+    if (hProcess == NULL) {
+        printf("hProcess Error ! \n");
+        return FALSE;
+    }
+    // 2. 计算dll路径长度
+    DWORD dllLen = strlen(dllPath) + 1;
+
+    // 3. 在目标进程分配内存
+    LPVOID lpAddr = VirtualAllocEx(hProcess, NULL, dllLen, MEM_COMMIT, PAGE_READWRITE);
+    if (lpAddr == NULL) {
+        printf("VirtualAllocEx Error! \n");
+        printf("errcode: %d \n", GetLastError());
+        CloseHandle(hProcess);
+        return FALSE;
+    }
+
+    // 4. 拷贝DLL路径名字目录到进程内存
+    BOOL ret = WriteProcessMemory(hProcess, lpAddr, dllPath, dllLen, NULL);
+    if (!ret) {
+        printf("WriteProcessMemory Error! \n");
+        printf("errcode: %d \n", GetLastError());
+        CloseHandle(hProcess);
+        return FALSE;
+    }
+
+    // 5. 获取模块地址
+    HMODULE hModule = GetModuleHandle(TEXT("Kernel32.dll"));
+    if (!hModule) {
+        printf("GetModuleHandle Error! \n");
+        printf("errcode: %d \n", GetLastError());
+        CloseHandle(hProcess);
+        return FALSE;
+    }
+
+    // 6. 获取LoadLibraryA 函数地址
+    /* DWORD loadAddr = (DWORD)GetProcAddress(hModule, "LoadLibraryA"); */
+    // 64 位
+    unsigned long long loadAddr = (unsigned long long)GetProcAddress(hModule, "LoadLibraryA");
+    if (!loadAddr) {
+        printf("GetModuleHandle Error! \n");
+        printf("errcode: %d \n", GetLastError());
+        CloseHandle(hProcess);
+        CloseHandle(hModule);
+        return FALSE;
+    }
+
+    // 7. 创建远程线程，加载dll
+    HANDLE thread = CreateRemoteThread(hProcess, NULL, 0, (LPTHREAD_START_ROUTINE)loadAddr, lpAddr, 0, NULL);
+    if (!thread) {
+        printf("CreateRemoteThread Error! \n");
+        printf("errcode: %d \n", GetLastError());
+        CloseHandle(hProcess);
+        CloseHandle(hModule);
+        return FALSE;
+    }
+
+    // 8. 关闭句柄
+    CloseHandle(hProcess);
+    return TRUE;
+};
+
+
+int main(int argc, const char *argv) {
+    // 1. 获取进程句柄
+    LPCTSTR className = TEXT("ConsoleWindowClass");
+    /* LPCTSTR windowName = TEXT("D:\\workspace\\vs2022\\win32_two\\Debug\\win32_two.exe"); */
+    LPCTSTR windowName = TEXT("D:\\workspace\\vs2022\\win32_two\\x64\\Debug\\win32_two.exe");
+    HWND gameHandle = FindWindow(className, windowName);
+    printf("gameHandle: %d \n", gameHandle);
+
+    DWORD pid;
+    GetWindowThreadProcessId(gameHandle, &pid);
+    printf("pid: %d \n", pid);
+
+    HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
+    printf("hProcess: %d \n", hProcess);
+
+    LoadRemoteDll(hProcess, "D:\\workspace\\library\\Dll1.dll");
+    return 0;
+};
+```
+
+上述代码执行的理论依据:
+
+把CreateRemoteThread的入口点函数设为LoadLibraryA(W),线程的那个参数设为DLL路径指针(在目标进程中,所以得把DLL路径拷到目标进程中, 用VirtualAllocEx在目标进程中分配内存空间, 然后WriteProcessMemory).
+
+可能出现的错误:
+
+1. CreateRemoteThread errorcode 5: 32位，64位没有对应上.
+2. 64 位注入后，被注入程序崩溃了：因为32位的LoadLibraryA地址是DWORD，但64位却是ULONGLONG，所以仅仅改变编译方式还不够, 必须用一个足够容纳8个字节地址的类型来保存。
+
+
+为什么在我这个进程中得到的LoadLibrary在远程进程中也可以用?
+
+系统DLL在各个进程中的映射地址都是一样的。
+
+
+64位进程,就得用64位的EXE来CreateRemoteThread, 另外DLL也应该是64位
+
+32位进程,就得用32位的EXE来CreateRemoteThread, 另外DLL也应该是32位
