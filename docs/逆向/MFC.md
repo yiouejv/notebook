@@ -2,9 +2,9 @@
 ## 打印
 
 ```c++
-#defind log(fmt, ...) \
-CString str; \
-str.Format(CString(fmt), __va_args__); \
+#define log(fmt, ...) \
+CString str;  \
+str.Format(CString(fmt), __VA_ARGS__);  \
 AfxMessageBox(str);
 ```
 
@@ -49,4 +49,15 @@ void WriteMemory(void *value, DWORD valueSize, ...)
 void WriteMemory(void *value, DWORD valueSize, DWORD address) {
 	WriteMemory(value, valueSize, address, -1);
 }
+```
+
+## 常量中有换行符
+
+```
+属性->配置属性->C++ ->命令行
+
+加入一下属性
+
+/source-charset:utf-8 
+
 ```
