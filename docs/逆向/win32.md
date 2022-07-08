@@ -986,3 +986,30 @@ int main(int argc, const char *argv) {
 64位进程,就得用64位的EXE来CreateRemoteThread, 另外DLL也应该是64位
 
 32位进程,就得用32位的EXE来CreateRemoteThread, 另外DLL也应该是32位
+
+## 模块隐藏
+
+### 模块隐藏之断链
+
+1. TEB(Thread Environment Block)：记录相关线程的信息，每一个线程都有自己的TEB, FS:[0]即是当前线程的TEB
+
+    mov eax, fs:[0]
+
+2. PEB(Process Environment Block): 存放进程信息，每一个进程都有自己的PEB信息，TEB 偏移0x30 即当前进程的PEB
+
+    mov eax, fs:[0x30]
+
+### 模块隐藏之PE指纹
+
+### 模块隐藏之VAD树
+
+## 注入代码
+
+复制代码的编写原则
+
+1. 不能有全局变量
+2. 不能使用常量字符串
+3. 不能使用系统调用
+4. 不能嵌套调用其他函数
+
+
