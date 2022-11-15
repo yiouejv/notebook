@@ -84,3 +84,44 @@ typedef struct _IMAGE_NT_HEADERS {
 ## PE文件在磁盘和内存中的两种状态
 
 <img src="../../images/pe_status.png">
+
+
+
+-------------------------
+
+## 每个部分具体的作用
+
+### DOS文件头属性说明
+
+<img src="../../images/dosHeader.png">
+
+这个结构体是给16位系统用的，除了第一个字段，和最后一个字段，操作系统用来判断是否PE头在哪里。
+
+所谓的PE指纹: Dos头两个字节是否为"MZ", 最后一个字段，最后四个字节的地址找到的标识是否为PE。
+
+### 标准PE头
+
+```c++
+typedef struct _IMAGE_FILE_HEADER {
+    // 可以运行在什么样的CPU上，任意: 0, intel 386及后续: 14C, x64: 8664
+    WORD Machine;
+    // 文件中存在的节的总数，如果要新增节或者合并节，就要修改这个值
+    WORD NumberOfSections;
+    // 编译器填写的时间戳，与文件属性里面的创建时间，修改时间无关
+    DWORD TimeDateStamp;
+
+    // 调试相关
+    DWORD PointerToSymbolTable;
+    DWORD NumberOfSymbols;
+
+    // 可选PE头的大小（32位PE文件大小为0xE0, 64位PE文件 0xF0)
+    WORD SizeOfOptionalHeader;//这个成员用来标识扩展PE头的大小，在这里改变扩展PE头的大小。
+
+    // 文件属性
+    WORD Characteristics;
+} IMAGE_FILE_HEADER, *PIMAGE_FILE_HEADER;
+```
+
+文件属性占两个字节，16位，每一位具体的含义如下表
+
+<img src="../../images/peFileAttr.png">
