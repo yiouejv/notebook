@@ -136,7 +136,33 @@ typedef struct _IMAGE_FILE_HEADER {
 
 <img src="../../images/peTab.png">
 
+- PointerToRawData: 当前节在文件中从哪里展开
+- VirtualAddress: 当前节在内存中从哪里展开
+
 节属性说明
 
 <img src="../../images/peAttr.png">
 
+## 全局变量
+
+全局变量有初始值，会在PE中有一个位置存储
+
+没有初始值，只有在PE文件被加载到内存中才会有位置
+
+## RVA 到 FOA的转换
+
+相对虚拟地址RVA
+
+文件偏移地址FOA
+
+1. 得到RVA的值: 内存地址 - ImageBase
+2. 判断RVA是否位于PE头中，如果是 FOA == RVA
+3. 判断RVA位于哪个节:
+
+    RVA >= 节.VirtualAddress
+
+    RVA <= 节.VirtualAddress + 当前节内存对齐后的大小
+
+    差值 = RVA - 节.VitualAddress
+
+    FOA = 节.PointerToRawData + 差值
