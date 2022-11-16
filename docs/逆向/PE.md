@@ -125,3 +125,18 @@ typedef struct _IMAGE_FILE_HEADER {
 文件属性占两个字节，16位，每一位具体的含义如下表
 
 <img src="../../images/peFileAttr.png">
+
+### 扩展PE头
+
+<img src="../../images/peOption32.png">
+
+程序的入口: ImageBase + AddressOfEntryPoint
+
+### 节表
+
+<img src="../../images/peTab.png">
+
+节属性说明
+
+<img src="../../images/peAttr.png">
+
