@@ -221,3 +221,16 @@ FARPROC GetProcAddress (
 
 GetProcAddress 拿着函数名去函数名称表遍历得到下标，用得到的下标去函数序号表里取函数的序号, 再拿序号做为下标去函数地址表里取函数的地址.
 
+## 导入表
+
+一个pe文件可能依赖多个dll, 可能存在多个导入表, 一个导入表占20个字节
+
+<img src="../../images/peImportTable.png">
+
+判断导入表结束: 连续20个字节都为00
+
+### 确定导入的函数
+
+<img src="../../images/peImportFunc.png">
+
+<img src="../../images/peImportFunc2.png">
