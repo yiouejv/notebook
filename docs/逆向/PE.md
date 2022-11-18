@@ -189,3 +189,35 @@ typedef struct _IMAGE_FILE_HEADER {
 5. 在原有数据的最后，新增一个节的数据（内存对齐的整数倍）
 6. 修正新增节表的属性
 
+## 导出表
+
+在扩展PE头结构体里最后一个字段，是一个结构体数组，数组长度为16，每个结构体大小为8个字节
+
+结构体定义如下:
+
+```c++
+struct IMAGE_DATA_DIRECTORY {
+    // 该成员的内存地址在哪，注意，这里的地址为RVA地址，如果文件对齐和内存对齐不一致则需要转换为FOA
+    DOWRD VirtualAddress;
+    // 指向内存地址的大小，这里的大小无实际意义，可以随便改
+    DOWRD Size;
+};
+```
+
+导出表的结构体如下，导出表占40个字节，上述的Size不一定为40个字节，原因是导出表里的结构体成员为指针。
+
+<img src="../../images/peExport.png">
+
+### 函数查找的过程
+
+<img src="../../images/peFindFunc.png">
+
+```c++
+FARPROC GetProcAddress (
+    HMODULE hMoudle;  // dll模块句柄, 实际上就是导出表的起始地址
+    LPCSTR lpProcName;  // 函数名
+);
+```
+
+GetProcAddress 拿着函数名去函数名称表遍历得到下标，用得到的下标去函数序号表里取函数的序号, 再拿序号做为下标去函数地址表里取函数的地址.
+
