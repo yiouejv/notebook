@@ -234,3 +234,15 @@ GetProcAddress 拿着函数名去函数名称表遍历得到下标，用得到�
 <img src="../../images/peImportFunc.png">
 
 <img src="../../images/peImportFunc2.png">
+
+
+## ShellCode
+
+不依赖环境，放到任务地方都可以执行的机器码
+
+ShellCode 的编写原则
+
+- 不能有全局变量
+- 不能使用常量字符串
+- 不能使用系统调用
+- 不能嵌套调用其他函数
