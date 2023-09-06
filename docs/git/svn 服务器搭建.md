@@ -31,15 +31,12 @@ password-db = passwd
 #权限文件为authz
 authz-db = authz
 
-（去掉前面的#，并且顶格，不然可能会报错）
+去掉前面的#，并且顶格，不然可能会报错
 '''
 
 ## authz 配置
 
 '''
-[aliases]
-# joe = /C=XZ/ST=Dessert/L=Snake City/O=Snake Oil, Ltd./OU=Research Institute/CN=Joe Average
-
 [groups]
 admin = yiouejv
 member = yule,shuiguo
